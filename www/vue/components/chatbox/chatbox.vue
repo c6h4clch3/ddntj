@@ -36,9 +36,6 @@
 import io from 'socket.io-client';
 import Vue from 'vue';
 
-const serverUrl = location.href;
-const socketio = io.connect(serverUrl);
-
 export default {
   data() {
     return {
@@ -47,16 +44,18 @@ export default {
       inputbox: "",
       selectedSystem: this.selected,
       name: this.yourname,
-      update: true
+      update: true,
     }
   },
   props: [
     'systems',
     'yourname',
-    'selected'
+    'selected',
+    'socketio'
   ],
   created: function() {
-    socketio.on("publish", (data) => {
+    console.log(this.socketio);
+    this.socketio.on("publish", (data) => {
       console.log(data);
       this.addMessage(data.text);
     });
@@ -90,7 +89,7 @@ export default {
 
       if(textInput === ''){ return; }
       const _msg = "[" + name + "] " + textInput;
-      socketio.emit(
+      this.socketio.emit(
         "publish",
         {
           'system': system,
