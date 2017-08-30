@@ -80,7 +80,7 @@ for (var index = 1; index <= constants.ROOM_LIMIT; index++) {
   // 接続開始カスタムイベント(接続元ユーザを保存し、他ユーザへ通知)
   room.on("connection", function(socket) {
     socket.on('connected', function (name) {
-      systemLogger.info(`connect : ${name} on Room ${rindex}`);
+      systemLogger.info(`connect : ${name} on Room ${room.name}`);
       var msg = name + "が入室しました";
       room.emit("publish", {'text': msg});
     });

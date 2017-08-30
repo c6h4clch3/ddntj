@@ -60,6 +60,11 @@ export default {
       this.addMessage(data.text);
     });
     this.addMessage("貴方は" + this.yourname + "として入室しました");
+    this.$nextTick(function() {
+      $('#chatbox').draggable().resizable({
+        handles: "all",
+      });
+    });
     return;
   },
   methods:{

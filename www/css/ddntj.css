@@ -1,12 +1,22 @@
 body{
   font-family: "Trebuchet MS", sans-serif;
   margin: 0px;
+  box-sizing: border-box;
+}
+
+* {
+  box-sizing: inherit;
 }
 
 #header{
+  align-items: center;
+  display: flex;
   margin: 0px;
   padding: 5px;
+  position: fixed;
   background-color: #ccffcc;
+  width: 100%;
+  height: 40px;
 }
 #header ul{
   font-size:0;
@@ -22,6 +32,7 @@ body{
   margin-right : 5px;
 }
 #header #title{
+  flex: 1 0 auto;
   text-align: right;
 }
 
