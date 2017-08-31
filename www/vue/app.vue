@@ -2,6 +2,7 @@
   <div class="base-canvas">
     <div class="connection-error" v-if="error">エラー: {{ errMsg }}</div>
     <div class="login-window" v-if="room === ''">
+      <div class="login-window__info">ようこそ、どどんてぃへ!</div>
       ログインルーム: <input v-model="loginRoom" @keydown.enter="connect()"/>
     </div>
     <chatbox :yourname.sync="yourname" :systems="systems"
@@ -88,9 +89,34 @@ export default {
   display: block;
   left: 0;
   margin-top: 40px;
+  overflow: hidden;
   position: absolute;
   right: 0;
   top: 0;
+  
+  .login-window {
+    align-items: center;
+    background-color: #eee;
+    border: solid 1px #000;
+    border-radius: 10px;
+    bottom: 0;
+    display: flex;
+    height: 300px;
+    justify-content: center;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 500px;
+
+    .login-window__info {
+      font-size: 24px;
+      position: absolute;
+      text-align: center;
+      top: 10px;
+    }
+  }
 }
 </style>
 

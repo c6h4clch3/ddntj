@@ -137,6 +137,7 @@ export default {
 <style lang="scss">
 #chatbox{
   align-items: flex-start;
+  background-color: #eee;
   border: solid #808080;
   bottom: 5px;
   display: flex;
