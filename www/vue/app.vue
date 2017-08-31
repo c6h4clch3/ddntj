@@ -69,7 +69,7 @@ export default {
   }
 }
 </script>
-<style>
+<style lang="scss">
 .connection-error {
   background-color: #f3dddd;
   border: solid 1px #f34444;
