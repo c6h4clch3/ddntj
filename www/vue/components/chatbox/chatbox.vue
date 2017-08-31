@@ -1,5 +1,8 @@
 <template>
-  <div id="chatbox" class="draggable ui-widget-content">
+  <div id="chatbox" class=""
+   @mousedown="dragMixInStart"
+   @mousemove="dragMixInContinue"
+   @mouseup="dragMixInEnd">
     <div id="chatmessages" @scroll="manageUpdateFlag()">
       <div class="spacer"></div>
       <div class="message"v-for="message in messages" v-cloak :key="message.id">{{message.text}}</div>
@@ -35,18 +38,22 @@
 <script>
 import io from 'socket.io-client';
 import Vue from 'vue';
+import dragMixIn from '../../mixins/dragMixIn';
 
 export default {
   data() {
     return {
       messages: [],
-      totalMessageId: 0 ,
+      totalMessageId: 0,
       inputbox: "",
       selectedSystem: this.selected,
       name: this.yourname,
       update: true,
     }
   },
+  mixins: [
+    dragMixIn
+  ],
   props: [
     'systems',
     'yourname',
@@ -60,6 +67,11 @@ export default {
       this.addMessage(data.text);
     });
     this.addMessage("貴方は" + this.yourname + "として入室しました");
+    this.$nextTick(function() {
+      // $('#chatbox').draggable().resizable({
+      //   handles: "all",
+      // });
+    });
     return;
   },
   methods:{
@@ -122,8 +134,10 @@ export default {
   }
 }
 </script>
-<style>
+<style lang="scss">
 #chatbox{
+  align-items: flex-start;
+  background-color: #eee;
   border: solid #808080;
   bottom: 5px;
   display: flex;
@@ -145,12 +159,14 @@ export default {
   overflow-y: scroll;
   position: relative;
   white-space: pre-line;
+  width: 100%;
 }
 
 .input-area {
   align-items: stretch;
   display: flex;
   flex: 0 0 auto;
+  width: 100%;
 }
 
 .input-box {
