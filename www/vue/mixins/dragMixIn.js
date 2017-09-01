@@ -23,7 +23,7 @@ export default {
   methods: {
     // mousedown
     dragMixInStart(event) {
-      if (event.target !== event.currentTarget || event.buttons !== 1) {
+      if (event.target !== event.currentTarget || event.button !== 0) {
         return;
       }
       this.target = event.currentTarget;
