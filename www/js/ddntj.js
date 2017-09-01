@@ -11,6 +11,3 @@ new Vue({
   template: '<app/>'
 })
 
-$("#button").button();
-$(".draggable").draggable()
-$(".draggable").resizable();

@@ -28,7 +28,7 @@
       <button
         @click="sendMessage"
         id="button"
-        class="enter-button"
+        class="enter"
       >
       send Message
       </button>
