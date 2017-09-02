@@ -10,7 +10,7 @@
     "build": "NODE_ENV=production webpack --config webpack/webpack.base.conf.js",
     "build:dev": "NODE_ENV=dev webpack --config webpack/webpack.base.conf.js",
     "heroku-postbuild": "npm run build",
-    "heroku-prebuild": "npm install --only=dev",
+    "heroku-prebuild": "yarn install --only=dev",
     "prestart": "webpack --config webpack/webpack.base.conf.js"
   },
   "babel": {
