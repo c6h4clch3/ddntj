@@ -44,7 +44,7 @@ export default {
     ...mapState({
       name: state => state.player.name,
       systems: state => state.player.systems,
-      selectedSystem: state => state.player.name,
+      selectedSystem: state => state.player.selectedSystem,
     })
   },
   store: store,
