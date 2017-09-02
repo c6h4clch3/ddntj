@@ -83,6 +83,7 @@ for (var index = 1; index <= constants.ROOM_LIMIT; index++) {
       systemLogger.info(`connect : ${name} on Room ${room.name}`);
       var msg = name + "が入室しました";
       room.emit("publish", {'text': msg});
+      socket.emit('connected');
     });
     // メッセージ送信カスタムイベント
     socket.on("publish", function (data) {

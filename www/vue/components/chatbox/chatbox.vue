@@ -10,10 +10,13 @@
     <div class="input-settings">
       <!-- 名前 -->
       <input
-        v-model="name"
+        :value="name"
+        @input="event => { this.updateName(event.target.value); }"
       >
       <!-- システム選択 -->
-      <select v-model="selectedSystem" name="systems" size="1">
+      <select name="systems" size="1"
+        :value="selectedSystem"
+        @input="event => { this.updateSelectedSystem(event.target.value) }">
         <option selected></option>
         <option v-for="system in systems" :key="system">{{system}}</p></option>
       </select>
@@ -39,6 +42,7 @@
 import io from 'socket.io-client';
 import Vue from 'vue';
 import dragMixIn from '../../mixins/dragMixIn';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   data() {
@@ -46,19 +50,21 @@ export default {
       messages: [],
       totalMessageId: 0,
       inputbox: "",
-      selectedSystem: this.selected,
-      name: this.yourname,
       update: true,
     }
   },
+  computed: {
+    ...mapState('player', {
+      name: 'name',
+      systems: 'systems',
+      selectedSystem: 'selectedSystem',
+    }),
+    ...mapState({
+      socketio: 'socket'
+    })
+  },
   mixins: [
     dragMixIn
-  ],
-  props: [
-    'systems',
-    'yourname',
-    'selected',
-    'socketio'
   ],
   created: function() {
     console.log(this.socketio);
@@ -66,7 +72,9 @@ export default {
       console.log(data);
       this.addMessage(data.text);
     });
-    this.addMessage("貴方は" + this.yourname + "として入室しました");
+    this.socketio.on('connected', () => {
+      this.addMessage("貴方は" + this.name + "として入室しました");
+    });
     this.$nextTick(function() {
       // $('#chatbox').draggable().resizable({
       //   handles: "all",
@@ -96,7 +104,7 @@ export default {
       event.stopPropagation();
       event.preventDefault();
       const textInput = this.inputbox;
-      const name = this.yourname;
+      const name = this.name;
       const system = this.selectedSystem;
 
       if(textInput === ''){ return; }
@@ -118,19 +126,11 @@ export default {
       } else {
         this.update = false;
       }
-    }
-  },
-  watch: {
-    selectedSystem: function(newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.$emit('update:selected', newVal);
-      }
     },
-    name: function(newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.$emit('update:yourname', newVal);
-      }
-    }
+    ...mapActions({
+      updateName: 'player/name',
+      updateSelectedSystem: 'player/selectedSystem'
+    })
   }
 }
 </script>

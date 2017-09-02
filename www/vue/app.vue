@@ -5,14 +5,15 @@
       <div class="login-window__info">ようこそ、どどんてぃへ!</div>
       ログインルーム: <input v-model="loginRoom" @keydown.enter="connect()"/>
     </div>
-    <chatbox :yourname.sync="yourname" :systems="systems"
-             :selected.sync="selectedSystem" :socketio="socketio" v-if="room !== ''"></chatbox>
+    <chatbox v-if="room !== ''"></chatbox>
   </div>
 </template>
 <script>
 import chatbox from './components/chatbox/chatbox';
 import dicebot from '../js/dicebot';
 import io from 'socket.io-client';
+import store from './store/store';
+import { mapState, mapActions } from 'vuex';
 
 let room = '';
 if (location.search !== '') {
@@ -28,46 +29,54 @@ export default {
   data() {
     return {
       loginRoom: room,
-      room: '',
-      yourname: '',
-      systems: [],
-      selectedSystem: 'DiceBot',
       error: false,
       errMsg: '',
-      socketio: {}
     }
   },
   components: {
     chatbox
   },
+  computed: {
+    ...mapState({
+      socket: 'socket',
+      room: 'room'
+    }),
+    ...mapState({
+      name: state => state.player.name,
+      systems: state => state.player.systems,
+      selectedSystem: state => state.player.name,
+    })
+  },
+  store: store,
   methods: {
     initName: function() {
-      const defname = Math.floor(Math.random()*100) + "さん";
-      this.yourname = defname
-      this.socketio.emit('connected', defname);
+      this.initialize().then(() => {
+        console.log(this.name);
+        this.socket.emit('connected', this.name);
+      });
     },
     connect() {
       this.error = false;
-      this.socketio = io(`/room/${this.loginRoom}`);
-      this.room = this.loginRoom;
-      this.socketio.on('error', (err) => {
-        console.error(err);
-        this.error = true;
-        this.errMsg = err;
-        this.room = '';
-        this.socketio = {};
+      this.updateRoom(this.loginRoom).then(() => {
+        this.socket.on('error', (err) => {
+          console.error(err);
+          this.error = true;
+          this.errMsg = err;
+          this.updateRoom('');
+        });
+        this.initName();
       });
-      dicebot.getsystems((systems) => {
-        this.systems = systems;
-      });
-      this.initName();
-    }
+    },
+    ...mapActions({
+      initialize: 'player/initialize',
+      updateRoom: 'room'
+    })
   },
   created: function() {
-    if (this.loginRoom !== '') {
+    if (room !== '') {
       this.connect();
     }
-  }
+  },
 }
 </script>
 <style lang="scss">
