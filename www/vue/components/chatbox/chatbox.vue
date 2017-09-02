@@ -11,12 +11,12 @@
       <!-- 名前 -->
       <input
         :value="name"
-        @input="name => this.updateName(name)"
+        @input="event => { this.updateName(event.target.value); }"
       >
       <!-- システム選択 -->
       <select name="systems" size="1"
         :value="selectedSystem"
-        @input="system => this.updateSelectedSystem(system)">
+        @input="event => { this.updateSelectedSystem(event.target.value) }">
         <option selected></option>
         <option v-for="system in systems" :key="system">{{system}}</p></option>
       </select>
