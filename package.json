@@ -10,7 +10,7 @@
     "build": "NODE_ENV=production webpack --config webpack/webpack.base.conf.js",
     "build:dev": "NODE_ENV=dev webpack --config webpack/webpack.base.conf.js",
     "heroku-postbuild": "npm run build",
-    "heroku-prebuild": "NPM_CONFIG_PRODUCTION=false npm install",
+    "heroku-prebuild": "npm install --production=false",
     "prestart": "webpack --config webpack/webpack.base.conf.js"
   },
   "babel": {
