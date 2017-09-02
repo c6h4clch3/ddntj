@@ -13,6 +13,11 @@
     "heroku-prebuild": "npm install --only=dev",
     "prestart": "webpack --config webpack/webpack.base.conf.js"
   },
+  "babel": {
+    "presets": [
+      "stage-1"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Minori-Akizuki/ddnty.git"
@@ -35,6 +40,7 @@
     "axios": "^0.16.2",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
+    "babel-preset-stage-1": "^6.24.1",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.5",
     "html-webpack-plugin": "^2.30.1",
