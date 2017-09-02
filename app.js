@@ -92,6 +92,13 @@ for (var index = 1; index <= constants.ROOM_LIMIT; index++) {
         function(res){
           systemLogger.debug(data.text);
           systemLogger.debug(res);
+          if (res.secret && res.ok) {
+            room.emit('publish', {'text': `${data.name} : シークレットダイス`});
+            msg = `シークレット(${data.system}) ${res.result}`;
+            room.to(socket.id).emit('publish', {'text': msg});
+
+            return;
+          }
           room.emit("publish", {'text': `${data.name} : ${data.text}`});
           if(res.ok){
             msg = `(${data.system}) ${res.result}`;
