@@ -80,8 +80,8 @@ export default {
 }
 </script>
 <style lang="scss">
-@import url(http://fonts.googleapis.com/earlyaccess/notosansjp.css);
-@import url(http://fonts.googleapis.com/earlyaccess/roundedmplus1c.css);
+@import url(https://fonts.googleapis.com/earlyaccess/notosansjp.css);
+@import url(https://fonts.googleapis.com/earlyaccess/roundedmplus1c.css);
 
 * {
   font-family: 'Rounded Mplus 1c';
