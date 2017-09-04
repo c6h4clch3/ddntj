@@ -80,6 +80,13 @@ export default {
 }
 </script>
 <style lang="scss">
+@import url(http://fonts.googleapis.com/earlyaccess/notosansjp.css);
+@import url(http://fonts.googleapis.com/earlyaccess/roundedmplus1c.css);
+
+* {
+  font-family: 'Rounded Mplus 1c';
+}
+
 .connection-error {
   background-color: #f3dddd;
   border: solid 1px #f34444;
@@ -102,7 +109,7 @@ export default {
   position: absolute;
   right: 0;
   top: 0;
-  
+
   .login-window {
     align-items: center;
     background-color: #eee;
