@@ -6,6 +6,7 @@
  * mousemove -> dragMixInContinue,
  * mouseup   -> dragMixInEnd
  * でイベントリスナーを登録すれば利用可能。
+ * v-dragディレクティブを動かしたい要素に付与することでも利用可能。
  * 暴発制御のために対象の要素自身を掴まないとダメ。
  * (子要素とかドラッグしても動かない。)
  */
@@ -63,6 +64,15 @@ export default {
 
       this.dragMixInContinue(event);
       this.dragging = false;
+    }
+  },
+  directives: {
+    drag: {
+      bind: function(el, binding, vnode) {
+        el.addEventListener('mousedown', vnode.context.dragMixInStart);
+        el.addEventListener('mousemove', vnode.context.dragMixInContinue);
+        el.addEventListener('mouseup', vnode.context.dragMixInEnd);
+      }
     }
   }
 }

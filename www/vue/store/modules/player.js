@@ -5,13 +5,14 @@ export default {
   namespaced: true,
   state: {
     name: '',
-    systems: [],
+    systems: ['DiceBot'],
     selectedSystem: 'DiceBot',
   },
   actions: {
     initialize(context) {
       const name = Math.floor(Math.random() * 100) + 'さん';
       context.commit('name', name);
+      context.commit('selectedSystem', 'DiceBot');
       let systems
       jsonp(
         'https://www2.taruki.com/bcdice-api/v1/systems?callback=',

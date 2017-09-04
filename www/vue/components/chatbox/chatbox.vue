@@ -1,8 +1,5 @@
 <template>
-  <div id="chatbox" class=""
-   @mousedown="dragMixInStart"
-   @mousemove="dragMixInContinue"
-   @mouseup="dragMixInEnd">
+  <div id="chatbox" class="chatbox" v-drag>
     <div id="chatmessages" @scroll="manageUpdateFlag()">
       <div class="spacer"></div>
       <div class="message"v-for="message in messages" v-cloak :key="message.id">{{message.text}}</div>
