@@ -28,11 +28,46 @@ export default {
         return;
       }
       this.target = event.currentTarget;
-      this.dragging = true;
       this.mouseX = event.pageX;
       this.mouseY = event.pageY;
       this.targetTop = this.target.offsetTop;
       this.targetLeft = this.target.offsetLeft;
+      if (this.resizeBorder !== undefined && this.target.dataset.direction !== undefined) {
+        // 同じく@c6h4clch3作成のResizeMixinが渡されている場合
+        const directions = this.target.dataset.direction.split(' ');
+        const rect = this.target.getBoundingClientRect();
+        const clientMouseX = this.mouseX - rect.left;
+        const clientMouseY = this.mouseY - rect.top;
+        const clientHeight = rect.height;
+        const clientWidth = rect.width;
+        let borderLeft = 0;
+        let borderRight = clientWidth;
+        let borderTop = 0;
+        let borderBottom = clientHeight;
+        directions.forEach(function(direction) {
+          switch (direction) {
+            case 'left':
+              borderLeft += this.resizeBorder;
+              break;
+            case 'right':
+              borderRight -= this.resizeBorder;
+              break;
+            case 'top':
+              borderTop += this.resizeBorder;
+              break;
+            case 'bottom':
+              borderBottom -= this.resizeBorder;
+              break;
+            default:
+              break;
+          }
+        }, this);
+        if ((borderLeft > clientMouseX && clientMouseX < borderRight) || (borderTop > clientMouseY && clientMouseY < borderBottom)) {
+          console.log('resize');
+          return;
+        }
+      }
+      this.dragging = true;
       this.target.style.position = 'absolute';
       this.target.style.top = this.targetTop + 'px';
       this.target.style.left = this.targetLeft + 'px';
@@ -70,7 +105,7 @@ export default {
     drag: {
       bind: function(el, binding, vnode) {
         el.addEventListener('mousedown', vnode.context.dragMixInStart);
-        el.addEventListener('mousemove', vnode.context.dragMixInContinue);
+        window.addEventListener('mousemove', vnode.context.dragMixInContinue);
         el.addEventListener('mouseup', vnode.context.dragMixInEnd);
       }
     }
