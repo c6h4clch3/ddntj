@@ -1,5 +1,5 @@
 <template>
-  <div id="chatbox" class="chatbox" v-drag v-resize="'all'">
+  <div id="chatbox" class="chatbox" v-drag v-resize.all>
     <div id="chatmessages" @scroll="manageUpdateFlag()">
       <div class="spacer"></div>
       <div class="message"v-for="message in messages" v-cloak :key="message.id">{{message.text}}</div>
@@ -192,6 +192,7 @@ export default {
 
 .spacer {
   flex: 1 0 0px;
+  max-height: 100%;
 }
 </style>
 

@@ -32,7 +32,7 @@ export default {
       this.mouseY = event.pageY;
       this.targetTop = this.target.offsetTop;
       this.targetLeft = this.target.offsetLeft;
-      if (this.resizeBorder !== undefined && this.target.dataset.direction !== undefined) {
+      if (this.target.dataset.direction !== undefined) {
         // 同じく@c6h4clch3作成のResizeMixinが渡されている場合
         const directions = this.target.dataset.direction.split(' ');
         const rect = this.target.getBoundingClientRect();
@@ -44,26 +44,26 @@ export default {
         let borderRight = clientWidth;
         let borderTop = 0;
         let borderBottom = clientHeight;
+        const resizeBorder = parseInt(this.target.dataset.border);
         directions.forEach(function(direction) {
           switch (direction) {
             case 'left':
-              borderLeft += this.resizeBorder;
+              borderLeft += resizeBorder;
               break;
             case 'right':
-              borderRight -= this.resizeBorder;
+              borderRight -= resizeBorder;
               break;
             case 'top':
-              borderTop += this.resizeBorder;
+              borderTop += resizeBorder;
               break;
             case 'bottom':
-              borderBottom -= this.resizeBorder;
+              borderBottom -= resizeBorder;
               break;
             default:
               break;
           }
         }, this);
-        if ((borderLeft > clientMouseX && clientMouseX < borderRight) || (borderTop > clientMouseY && clientMouseY < borderBottom)) {
-          console.log('resize');
+        if (borderLeft > clientMouseX || clientMouseX > borderRight || borderTop > clientMouseY || clientMouseY > borderBottom) {
           return;
         }
       }
