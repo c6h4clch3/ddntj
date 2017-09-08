@@ -1,5 +1,5 @@
 <template>
-  <div id="chatbox" class="chatbox" v-drag>
+  <div id="chatbox" class="chatbox" v-drag v-resize.all>
     <div id="chatmessages" @scroll="manageUpdateFlag()">
       <div class="spacer"></div>
       <div class="message"v-for="message in messages" v-cloak :key="message.id">{{message.text}}</div>
@@ -39,6 +39,7 @@
 import io from 'socket.io-client';
 import Vue from 'vue';
 import dragMixIn from '../../mixins/dragMixIn';
+import resizeMixIn from '../../mixins/resizeMixIn';
 import { mapState, mapActions } from 'vuex';
 
 export default {
@@ -61,7 +62,8 @@ export default {
     })
   },
   mixins: [
-    dragMixIn
+    dragMixIn,
+    resizeMixIn
   ],
   created: function() {
     console.log(this.socketio);
@@ -175,7 +177,7 @@ export default {
   flex: 1 0 0px;
   height: 50px;
   padding: 0;
-  resize: none
+  resize: none;
 }
 
 .enter-button {
@@ -193,6 +195,7 @@ export default {
 
 .spacer {
   flex: 1 0 0px;
+  max-height: 100%;
 }
 </style>
 
