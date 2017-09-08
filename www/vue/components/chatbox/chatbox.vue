@@ -67,7 +67,9 @@ export default {
     console.log(this.socketio);
     this.socketio.on("publish", (data) => {
       console.log(data);
-      this.addMessage(data.text);
+      const text = data.text;
+      console.log(text);
+      this.addMessage.apply(this, [].concat(text));
     });
     this.socketio.on('connected', () => {
       this.addMessage("貴方は" + this.name + "として入室しました");
@@ -80,11 +82,13 @@ export default {
     return;
   },
   methods:{
-    addMessage: function(msg){
+    addMessage: function(...msgs){
       const messageBox = document.getElementById('chatmessages');
-      this.messages.push({
-        id:(this.totalMessageId++),
-        text:msg
+      msgs.forEach((msg) => {
+        this.messages.push({
+          id:(this.totalMessageId++),
+          text:msg
+        });
       });
       if (this.update) {
         this.$nextTick(function() {
@@ -94,7 +98,6 @@ export default {
       }
     },
     sendMessage: function(event){
-      console.log(event.getModifierState('Shift'))
       if (event.getModifierState('Shift')) {
         return;
       }

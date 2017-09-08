@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/Minori-Akizuki/ddnty#readme",
   "dependencies": {
+    "bcdice-js": "^0.4.0",
     "express": "^4.15.4",
     "forever": "^0.15.3",
     "jquery": "^3.2.1",

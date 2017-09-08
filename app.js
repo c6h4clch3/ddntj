@@ -32,6 +32,16 @@ app.get('/', function(req, res, next) {
   res.end(output);
   return;
 });
+app.get('/api/systems', function(req, res, next) {
+  const output = {
+    systems: dicebot.systems
+  }
+  res.writeHead(200, {
+    'Content-Type': 'application/json'
+  });
+  systemLogger.debug('get systems');
+  res.end(output);
+});
 // var server = require("http").createServer(
 //   function(req, res) {
 //     var requestpath =  req.url;
@@ -71,18 +81,30 @@ app.get('/', function(req, res, next) {
 //   () => {systemLogger.info(`listening on *:${constants.LISTEN_PORT}`);}
 // );
 
+class Log {
+  constructor() {
+    this.log = [];
+  }
+  push(msg) {
+    this.log.push(msg);
+  }
+}
+
 // socket.io イベント定義 (分割できないかな……)
 var io = require("socket.io").listen(server);
 const rooms = [];
 for (var index = 1; index <= constants.ROOM_LIMIT; index++) {
   const room = io.of(`/room/${index}`);
   const rindex = index;
+  const logger = new Log();
   // 接続開始カスタムイベント(接続元ユーザを保存し、他ユーザへ通知)
   room.on("connection", function(socket) {
     socket.on('connected', function (name) {
       systemLogger.info(`connect : ${name} on Room ${room.name}`);
+      socket.emit('publish', {'text': logger.log});
       var msg = name + "が入室しました";
       room.emit("publish", {'text': msg});
+      logger.push(msg);
       socket.emit('connected');
     });
     // メッセージ送信カスタムイベント
@@ -94,16 +116,21 @@ for (var index = 1; index <= constants.ROOM_LIMIT; index++) {
           systemLogger.debug(data.text);
           systemLogger.debug(res);
           if (res.secret && res.ok) {
-            room.emit('publish', {'text': `${data.name} : シークレットダイス`});
+            msg = `${data.name} : シークレットダイス`;
+            room.emit('publish', { 'text': msg });
+            logger.push(msg);
             msg = `シークレット(${data.system}) ${res.result}`;
             room.to(socket.id).emit('publish', {'text': msg});
 
             return;
           }
-          room.emit("publish", {'text': `${data.name} : ${data.text}`});
+          msg = `${data.name} : ${data.text}`;
+          room.emit("publish", {'text': msg});
+          logger.push(msg);
           if(res.ok){
             msg = `(${data.system}) ${res.result}`;
             room.emit("publish", {'text': msg});
+            logger.push(msg);
           }
         },
         data.system,
