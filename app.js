@@ -12,6 +12,7 @@ var systemLogger = Log4js.getLogger();
 // 自作ライブラリ群
 var constants = require('./js/constants.js').constants();
 var dicebot = require('./js/dicebot.js').dicebot();
+const preserve = require('./js/preserve.js');
 
 // パブリックパス
 const publicPath = './dist'
@@ -79,14 +80,36 @@ app.get('/api/systems', function(req, res, next) {
 // ).listen(
 //   process.env.PORT || constants.LISTEN_PORT,
 //   () => {systemLogger.info(`listening on *:${constants.LISTEN_PORT}`);}
-// );
+// )
 
 class Log {
-  constructor() {
+  constructor(room) {
     this.log = [];
+    this.room = room;
   }
   push(msg) {
     this.log.push(msg);
+    preserve.preserveChatLog({
+      "main": this.log
+    }, this.room, function(err) {
+      if (err) {
+        systemLogger.error(err);
+      }
+    });
+  }
+  read() {
+    preserve.getChatLog(this.room, (err, data) => {
+      if (err) {
+        systemLogger.error(err);
+        return;
+      }
+      this.log = JSON.parse(data).main;
+    });
+    return this;
+  }
+  flush() {
+    this.log = [];
+    preserve.flushChatLog(this.room);
   }
 }
 
@@ -96,7 +119,7 @@ const rooms = [];
 for (var index = 1; index <= constants.ROOM_LIMIT; index++) {
   const room = io.of(`/room/${index}`);
   const rindex = index;
-  const logger = new Log();
+  const logger = new Log(room.name).read();
   // 接続開始カスタムイベント(接続元ユーザを保存し、他ユーザへ通知)
   room.on("connection", function(socket) {
     socket.on('connected', function (name) {
@@ -121,7 +144,6 @@ for (var index = 1; index <= constants.ROOM_LIMIT; index++) {
             logger.push(msg);
             msg = `シークレット(${data.system}) ${res.result}`;
             room.to(socket.id).emit('publish', {'text': msg});
-
             return;
           }
           msg = `${data.name} : ${data.text}`;

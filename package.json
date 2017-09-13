@@ -11,7 +11,8 @@
     "build:dev": "NODE_ENV=dev webpack --config webpack/webpack.base.conf.js",
     "heroku-postbuild": "npm run build",
     "heroku-prebuild": "npm install --production=false",
-    "prestart": "webpack --config webpack/webpack.base.conf.js"
+    "prestart": "webpack --config webpack/webpack.base.conf.js",
+    "forever": "forever"
   },
   "babel": {
     "presets": [
@@ -29,7 +30,7 @@
   },
   "homepage": "https://github.com/Minori-Akizuki/ddnty#readme",
   "dependencies": {
-    "bcdice-js": "^0.4.0",
+    "bcdice-js": "latest",
     "express": "^4.15.4",
     "forever": "^0.15.3",
     "jquery": "^3.2.1",

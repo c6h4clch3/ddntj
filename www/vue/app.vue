@@ -6,14 +6,17 @@
       ログインルーム: <input v-model="loginRoom" @keydown.enter="connect()"/>
     </div>
     <chatbox v-if="room !== ''"></chatbox>
+    <map-canvas></map-canvas>
   </div>
 </template>
 <script>
-import chatbox from './components/chatbox/chatbox';
 import dicebot from '../js/dicebot';
 import io from 'socket.io-client';
-import store from './store/store';
 import { mapState, mapActions } from 'vuex';
+
+import store from './store/store';
+import chatbox from './components/chatbox/chatbox';
+import mapCanvas from './components/map/map';
 
 let room = '';
 if (location.search !== '') {
@@ -34,7 +37,8 @@ export default {
     }
   },
   components: {
-    chatbox
+    chatbox,
+    mapCanvas
   },
   computed: {
     ...mapState({
