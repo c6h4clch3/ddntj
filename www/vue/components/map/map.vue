@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="character-layer">
-      <div class="character" :style="{ width: `${grid * scale}px`, height: `${grid * scale}px`, 'background-image': `url(${imageUrl})` }" v-drag></div>
+      <div class="character" :style="{ width: `${grid * scale}px`, height: `${grid * scale}px`, 'background-image': `url(${imageUrl})` }" v-drag="{ grid: grid * scale }"></div>
     </div>
   </div>
 </template>
@@ -107,12 +107,13 @@ export default {
 
   .character-layer {
     bottom: 0;
+    box-sizing: border-box;
     left: 0;
     margin: auto;
+    pointer-events: none;
     position: absolute;
     right: 0;
     top: 0;
-    pointer-events: none;
     z-index: 1;
   }
 
