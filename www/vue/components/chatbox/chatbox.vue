@@ -66,11 +66,8 @@ export default {
     resizeMixIn
   ],
   created: function() {
-    console.log(this.socketio);
     this.socketio.on("publish", (data) => {
-      console.log(data);
       const text = data.text;
-      console.log(text);
       this.addMessage.apply(this, [].concat(text));
     });
     this.socketio.on('connected', () => {
@@ -179,6 +176,7 @@ export default {
   height: 50px;
   padding: 0;
   resize: none;
+  font-size: 14px;
 }
 
 .enter-button {

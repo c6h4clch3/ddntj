@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/Minori-Akizuki/ddnty#readme",
   "dependencies": {
-    "bcdice-js": "latest",
+    "bcdice-js": "^0.6.1",
     "express": "^4.15.4",
     "forever": "^0.15.3",
     "jquery": "^3.2.1",
@@ -48,6 +48,7 @@
     "html-webpack-plugin": "^2.30.1",
     "jsonp": "^0.2.1",
     "mkdirp": "^0.5.1",
+    "mongodb": "^2.2.31",
     "node-sass": "^4.5.3",
     "sass-loader": "^6.0.6",
     "vue-html-loader": "^1.2.4",

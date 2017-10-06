@@ -80,16 +80,18 @@ export default {
         return;
       }
       event.preventDefault();
-      const diffX = event.pageX - this.mouseX;
-      const diffY = event.pageY - this.mouseY;
+      requestAnimationFrame(() => {
+        const diffX = event.pageX - this.mouseX;
+        const diffY = event.pageY - this.mouseY;
 
-      this.target.style.top = parseInt(this.target.style.top) + diffY + 'px';
-      this.target.style.left = parseInt(this.target.style.left) + diffX + 'px';
+        this.target.style.top = parseInt(this.target.style.top) + diffY + 'px';
+        this.target.style.left = parseInt(this.target.style.left) + diffX + 'px';
 
-      this.mouseX = event.pageX;
-      this.mouseY = event.pageY;
-      this.targetTop = this.target.style.top;
-      this.targetLeft = this.target.style.left;
+        this.mouseX = event.pageX;
+        this.mouseY = event.pageY;
+        this.targetTop = this.target.style.top;
+        this.targetLeft = this.target.style.left;
+      });
     },
     // mouseup
     dragMixInEnd(event) {
@@ -99,6 +101,10 @@ export default {
 
       this.dragMixInContinue(event);
       this.dragging = false;
+      this.$emit('dragend', {
+        x: this.targetLeft,
+        y: this.targetTop
+      })
     }
   },
   directives: {

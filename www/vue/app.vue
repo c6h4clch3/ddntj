@@ -6,7 +6,7 @@
       ログインルーム: <input v-model="loginRoom" @keydown.enter="connect()"/>
     </div>
     <chatbox v-if="room !== ''"></chatbox>
-    <map-canvas></map-canvas>
+    <map-canvas v-if="room !== ''"></map-canvas>
   </div>
 </template>
 <script>

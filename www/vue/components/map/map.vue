@@ -6,14 +6,16 @@
       <div class="grid-row" v-for="rn in rows" :key="rn"
            :style="{ height: `${grid * scale}px` }">
         <div class="grid" v-for="cn in columns" :key="cn"
-             :style="{ width: `${grid * scale}px`}">
+             :style="{ width: `${grid * scale}px` }">
           <span :style="{ transform: `scale(${scale})` }">
             {{ cn }}-{{ rn }}
           </span>
         </div>
       </div>
     </div>
-    <div class="character-layer"></div>
+    <div class="character-layer">
+      <div class="character" :style="{ width: `${grid * scale}px`, height: `${grid * scale}px`, 'background-image': `url(${imageUrl})` }" v-drag></div>
+    </div>
   </div>
 </template>
 
@@ -27,7 +29,7 @@ export default {
       rows: 20,
       columns: 20,
       grid: 50,
-      scale: .7,
+      scale: 0.7,
       imageUrl: 'http://growthseed.jp/wp-content/uploads/2016/12/peach-1.jpg'
     }
   },
@@ -100,6 +102,27 @@ export default {
     position: absolute;
     right: 0;
     top: bottom;
+    z-index: 0;
+  }
+
+  .character-layer {
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .character {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: solid 2px #ee0;
+    border-radius: 2px;
+    pointer-events: all;
   }
 }
 </style>

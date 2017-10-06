@@ -103,33 +103,35 @@ export default {
         return;
       }
       event.preventDefault();
-      const diffX = event.pageX - this.mouseX;
-      const diffY = event.pageY - this.mouseY;
+      requestAnimationFrame(() => {
+        const diffX = event.pageX - this.mouseX;
+        const diffY = event.pageY - this.mouseY;
 
-      switch (true) {
-        case this.enableResizeLeft:
-          this.target.style.left = (parseInt(this.target.style.left) + diffX) + 'px';
-          this.target.style.width = (parseInt(this.target.style.width) - diffX) + 'px';
-          break;
-        case this.enableResizeRight:
-          this.target.style.width = (parseInt(this.target.style.width) + diffX) + 'px';
-          break;
-        default:
-          break;
-      }
-      switch (true) {
-        case this.enableResizeTop:
-          this.target.style.top = (parseInt(this.target.style.top) + diffY) + 'px';
-          this.target.style.height = (parseInt(this.target.style.height) - diffY) + 'px';
-          break;
-        case this.enableResizeBottom:
-          this.target.style.height = (parseInt(this.target.style.height) + diffY) + 'px';
-          break;
-        default:
-          break;
-      }
-      this.mouseX = event.pageX;
-      this.mouseY = event.pageY;
+        switch (true) {
+          case this.enableResizeLeft:
+            this.target.style.left = (parseInt(this.target.style.left) + diffX) + 'px';
+            this.target.style.width = (parseInt(this.target.style.width) - diffX) + 'px';
+            break;
+          case this.enableResizeRight:
+            this.target.style.width = (parseInt(this.target.style.width) + diffX) + 'px';
+            break;
+          default:
+            break;
+        }
+        switch (true) {
+          case this.enableResizeTop:
+            this.target.style.top = (parseInt(this.target.style.top) + diffY) + 'px';
+            this.target.style.height = (parseInt(this.target.style.height) - diffY) + 'px';
+            break;
+          case this.enableResizeBottom:
+            this.target.style.height = (parseInt(this.target.style.height) + diffY) + 'px';
+            break;
+          default:
+            break;
+        }
+        this.mouseX = event.pageX;
+        this.mouseY = event.pageY;
+      });
     },
     // mouseup
     resizeMixInEnd(event) {
@@ -162,7 +164,7 @@ export default {
             })) {
               this.push(value);
             }
-          }, arr)
+          }, arr);
         };
         for (let direction in binding.modifiers) {
           if (!binding.modifiers.hasOwnProperty(direction)) {
