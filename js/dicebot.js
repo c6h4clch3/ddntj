@@ -1,6 +1,7 @@
 const BCDice = require('bcdice-js').BCDice;
 const DiceBotLoader = require('bcdice-js').DiceBotLoader;
 var Log4js = require('log4js');
+const axios = require('axios');
 // log4js設定
 Log4js.configure('js/config/log-config.json');
 var systemLogger = Log4js.getLogger();
@@ -19,12 +20,33 @@ exports.dicebot = function(){
   dicebots.forEach(function(elm) {
     this.push(elm._diceBot.$$class.$$name);
   }, systems);
+  // function loadsystems() {
+  //   let systems;
+  //   systems = new Promise(resolve => {
+  //     https.get(
+  //       `${BOTURL}systems`,
+  //       (res) => {
+  //         let body = '';
+  //         res.setEncoding('utf8');
+  //         res.on('data', (chunk) => {
+  //           body += chunk;
+  //         });
+  //         res.on('end', (res) => {
+  //           _res = JSON.parse(body);
+  //           systems = body.systems;
+  //           resolve();
+  //         })
+  //       }
+  //     );
+  //   });
+  //   return systems;
+  // }
 
   var _dicebot = {
 
     systems : systems,
 
-    roll : function(callback, system, command){
+    roll : function(callback, system, command) {
       // var _command = encodeURIComponent(command);
       // var reqUrl = `${BOTURL}diceroll?system=${system}&command=${_command}`;
       // systemLogger.debug(`requrl : ${reqUrl}`);

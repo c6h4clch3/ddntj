@@ -6,7 +6,7 @@ import ChatBox from '../components/chatbox/chatbox';
 
 Vue.use(Router);
 
-// 現在非利用。念のため作成。部屋機能作ったら使うかも
+// 現在未使用。念のため作成。部屋機能作ったら使うかも
 export default new Router ({
   routes: [
     {

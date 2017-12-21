@@ -14,7 +14,12 @@
       </div>
     </div>
     <div class="character-layer">
-      <div class="character" :style="{ width: `${grid * scale}px`, height: `${grid * scale}px`, 'background-image': `url(${imageUrl})` }" v-drag="{ grid: grid * scale }"></div>
+      <div  class="character" v-drag="{ grid: grid * scale }"
+            :style="{
+              width: `${grid * scale}px`,
+              height: `${grid * scale}px`,
+              'background-image': `url(${imageUrl})`
+            }"></div>
     </div>
   </div>
 </template>
