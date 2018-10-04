@@ -11,7 +11,7 @@
  * horizontal: 左右端からのリサイズを許可
  * vertical: 上下端からのリサイズを許可
  * all: 全方向の端からのリサイズを許可
- * これらの指定は半角スペースつなぎで複数使用することができる。
+ * これらの指定は複数使用することができる。
  * ex) v-resize.left.right <=> v-resize.horizontal
  * コンポーネントのdataでresizeBorderを上書きすることで
  * そのコンポーネントでのリサイズ可能な境界幅を指定できる。
@@ -103,33 +103,35 @@ export default {
         return;
       }
       event.preventDefault();
-      const diffX = event.pageX - this.mouseX;
-      const diffY = event.pageY - this.mouseY;
+      requestAnimationFrame(() => {
+        const diffX = event.pageX - this.mouseX;
+        const diffY = event.pageY - this.mouseY;
 
-      switch (true) {
-        case this.enableResizeLeft:
-          this.target.style.left = (parseInt(this.target.style.left) + diffX) + 'px';
-          this.target.style.width = (parseInt(this.target.style.width) - diffX) + 'px';
-          break;
-        case this.enableResizeRight:
-          this.target.style.width = (parseInt(this.target.style.width) + diffX) + 'px';
-          break;
-        default:
-          break;
-      }
-      switch (true) {
-        case this.enableResizeTop:
-          this.target.style.top = (parseInt(this.target.style.top) + diffY) + 'px';
-          this.target.style.height = (parseInt(this.target.style.height) - diffY) + 'px';
-          break;
-        case this.enableResizeBottom:
-          this.target.style.height = (parseInt(this.target.style.height) + diffY) + 'px';
-          break;
-        default:
-          break;
-      }
-      this.mouseX = event.pageX;
-      this.mouseY = event.pageY;
+        switch (true) {
+          case this.enableResizeLeft:
+            this.target.style.left = (parseInt(this.target.style.left) + diffX) + 'px';
+            this.target.style.width = (parseInt(this.target.style.width) - diffX) + 'px';
+            break;
+          case this.enableResizeRight:
+            this.target.style.width = (parseInt(this.target.style.width) + diffX) + 'px';
+            break;
+          default:
+            break;
+        }
+        switch (true) {
+          case this.enableResizeTop:
+            this.target.style.top = (parseInt(this.target.style.top) + diffY) + 'px';
+            this.target.style.height = (parseInt(this.target.style.height) - diffY) + 'px';
+            break;
+          case this.enableResizeBottom:
+            this.target.style.height = (parseInt(this.target.style.height) + diffY) + 'px';
+            break;
+          default:
+            break;
+        }
+        this.mouseX = event.pageX;
+        this.mouseY = event.pageY;
+      });
     },
     // mouseup
     resizeMixInEnd(event) {
@@ -162,7 +164,7 @@ export default {
             })) {
               this.push(value);
             }
-          }, arr)
+          }, arr);
         };
         for (let direction in binding.modifiers) {
           if (!binding.modifiers.hasOwnProperty(direction)) {

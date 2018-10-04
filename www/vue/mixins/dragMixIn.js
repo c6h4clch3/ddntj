@@ -80,16 +80,18 @@ export default {
         return;
       }
       event.preventDefault();
-      const diffX = event.pageX - this.mouseX;
-      const diffY = event.pageY - this.mouseY;
+      requestAnimationFrame(() => {
+        const diffX = event.pageX - this.mouseX;
+        const diffY = event.pageY - this.mouseY;
 
-      this.target.style.top = parseInt(this.target.style.top) + diffY + 'px';
-      this.target.style.left = parseInt(this.target.style.left) + diffX + 'px';
+        this.target.style.top = parseInt(this.target.style.top) + diffY + 'px';
+        this.target.style.left = parseInt(this.target.style.left) + diffX + 'px';
 
-      this.mouseX = event.pageX;
-      this.mouseY = event.pageY;
-      this.targetTop = this.target.style.top;
-      this.targetLeft = this.target.style.left;
+        this.mouseX = event.pageX;
+        this.mouseY = event.pageY;
+        this.targetTop = this.target.style.top;
+        this.targetLeft = this.target.style.left;
+      });
     },
     // mouseup
     dragMixInEnd(event) {
@@ -99,14 +101,53 @@ export default {
 
       this.dragMixInContinue(event);
       this.dragging = false;
+      if (this.target.dataset.gridSize) {
+        requestAnimationFrame(() => {
+          const grid = parseInt(this.target.dataset.gridSize);
+          const targetTop = parseInt(this.targetTop);
+          const targetLeft = parseInt(this.targetLeft);
+          const floorTop =
+            (grid * Math.floor(targetTop / grid)) - targetTop;
+          const floorLeft =
+            (grid * Math.floor(targetLeft / grid)) - targetLeft;
+          const ceilTop =
+            (grid * Math.ceil(targetTop / grid)) - targetTop;
+          const ceilLeft =
+            (grid * Math.ceil(targetLeft / grid)) - targetLeft;
+          this.targetTop =
+            parseInt(this.targetTop) + (ceilTop + floorTop >= 0 ? floorTop : ceilTop) + 'px';
+          this.targetLeft =
+            parseInt(this.targetLeft) + (ceilLeft + floorLeft >= 0 ? floorLeft : ceilLeft) + 'px';
+          this.target.style.top = this.targetTop;
+          this.target.style.left = this.targetLeft;
+        });
+      }
+      this.$emit('dragend', {
+        x: this.targetLeft,
+        y: this.targetTop
+      })
     }
   },
   directives: {
     drag: {
       bind: function(el, binding, vnode) {
+        if (binding.value !== undefined) {
+          const grid = binding.value.grid;
+          if (grid !== undefined && grid !== null) {
+            el.dataset.gridSize = grid;
+          }
+        }
         el.addEventListener('mousedown', vnode.context.dragMixInStart);
         window.addEventListener('mousemove', vnode.context.dragMixInContinue);
         el.addEventListener('mouseup', vnode.context.dragMixInEnd);
+      },
+      update: function(el, binding, vnode) {
+        if (binding.value !== undefined) {
+          const grid = binding.value.grid;
+          if (grid !== undefined && grid !== null) {
+            el.dataset.gridSize = grid;
+          }
+        }
       }
     }
   }

@@ -66,10 +66,9 @@ export default {
     resizeMixIn
   ],
   created: function() {
-    console.log(this.socketio);
     this.socketio.on("publish", (data) => {
-      console.log(data);
-      this.addMessage(data.text);
+      const text = data.text;
+      this.addMessage.apply(this, [].concat(text));
     });
     this.socketio.on('connected', () => {
       this.addMessage("貴方は" + this.name + "として入室しました");
@@ -82,11 +81,13 @@ export default {
     return;
   },
   methods:{
-    addMessage: function(msg){
+    addMessage: function(...msgs){
       const messageBox = document.getElementById('chatmessages');
-      this.messages.push({
-        id:(this.totalMessageId++),
-        text:msg
+      msgs.forEach((msg) => {
+        this.messages.push({
+          id:(this.totalMessageId++),
+          text:msg
+        });
       });
       if (this.update) {
         this.$nextTick(function() {
@@ -96,7 +97,6 @@ export default {
       }
     },
     sendMessage: function(event){
-      console.log(event.getModifierState('Shift'))
       if (event.getModifierState('Shift')) {
         return;
       }
@@ -146,6 +146,7 @@ export default {
   padding: 0.5em;
   position: absolute;
   width: 800px;
+  z-index: 1000;
 }
 
 #chatmessages{
@@ -175,6 +176,7 @@ export default {
   height: 50px;
   padding: 0;
   resize: none;
+  font-size: 14px;
 }
 
 .enter-button {
